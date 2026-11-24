@@ -2,7 +2,7 @@
 // 1. SUPABASE БАЙЛАНЫСЫ
 // =========================================================
 const SUPABASE_URL = 'https://supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIs...';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
@@ -246,7 +246,7 @@ async function loadUserContext() {
     if (!currentUser) return;
     const { data: profile } = await supabaseClient
         .from('profiles').select('*').eq('id', currentUser.id).single();
-    currentProfile = profile;
+    const freePlan = allPlans.find(p => p.name === 'Free') || allPlans[0];
 
     const { data: cafe } = await supabaseClient
         .from('cafes').select('*').eq('owner_id', currentUser.id).maybeSingle();
