@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TapMenu.kz — Умные NFC-страницы для кафе и ресторанов</title>
+    <script src="https://tailwindcss.com"></script>
+    <script src="https://jsdelivr.net"></script>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased selection:bg-black selection:text-white">
+
+    <!-- Хабарлама (Toast) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 translate-y-4 opacity-0">
+        <div class="bg-gray-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-medium">
+            <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span id="toast-msg">Сақталды</span>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 1. БАСТЫ БЕТ (tapmenu.kz/)                                -->
+    <!-- ========================================================= -->
+    <div id="view-landing" class="view-section hidden min-h-screen flex flex-col">
+        <header class="border-b bg-white/80 backdrop-blur-md sticky top-0 z-30">
+            <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+                <a href="/" class="flex items-center gap-2 font-bold text-xl tracking-tight">
+                    <span class="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-wifi rotate-90"></i>
+                    </span>
+                    <span>TapMenu<span class="text-gray-400">.kz</span></span>
+                </a>
+                <div class="flex items-center gap-3">
+                    <button onclick="setLanguage('kk')" class="lang-btn text-xs font-semibold px-2.5 py-1 rounded-md border">KZ</button>
+                    <button onclick="setLanguage('ru')" class="lang-btn text-xs font-semibold px-2.5 py-1 rounded-md border">RU</button>
+                    <button onclick="openAuthModal('login')" data-i18n="nav_login" class="text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100">Кіру</button>
+                    <button onclick="openAuthModal('signup')" data-i18n="nav_signup" class="text-sm font-medium px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition">Парақша ашу</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 max-w-6xl mx-auto px-4 py-16 grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-semibold mb-6">
+                    <i class="fa-solid fa-bolt"></i> <span data-i18n="hero_badge">Қазақстан HoReCa саласына арналған NFC шешім</span>
+                </span>
+                <h1 data-i18n="hero_title" class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">
+                    Үстелге бір рет тигізу — мәзір, Wi-Fi, пікірлер және Kaspi шайпұл.
+                </h1>
+                <p data-i18n="hero_sub" class="text-lg text-gray-600 mb-8 leading-relaxed">
+                    Мекемеңіздің жеке NFC парақшасын 3 минутта жасаңыз. Қосымша орнатусыз. Тұрақты сілтеме tapmenu.kz/мекеме-аты.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="openAuthModal('signup')" data-i18n="hero_cta" class="px-6 py-3.5 rounded-xl bg-black text-white font-semibold hover:bg-gray-800 transition shadow-lg">
+                        Тегін бастау
+                    </button>
+                    <a href="#pricing" data-i18n="hero_plans" class="px-6 py-3.5 rounded-xl bg-white border border-gray-200 font-semibold hover:bg-gray-50 transition">
+                        Тарифтер
+                    </a>
+                </div>
+            </div>
+
+            <!-- Демо карта -->
+            <div class="mx-auto w-full max-w-sm bg-white rounded-[2.5rem] p-6 shadow-2xl border-8 border-gray-900">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-900 text-white mx-auto flex items-center justify-center text-2xl font-bold mb-3">A</div>
+                    <h3 class="font-bold text-lg">ALMATY ROASTERS</h3>
+                    <p class="text-xs text-gray-500">Кофейня • Абай даңғылы 44</p>
+                </div>
+                <div class="space-y-2.5 text-sm font-medium">
+                    <div class="p-3.5 rounded-xl bg-gray-900 text-white flex items-center justify-between">
+                        <span><i class="fa-solid fa-book-open mr-2"></i> Мәзірді ашу</span>
+                        <i class="fa-solid fa-chevron-right text-xs opacity-60"></i>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-red-50 text-red-700 border border-red-100 flex items-center justify-between">
+                        <span><i class="fa-solid fa-heart mr-2"></i> Kaspi шайпұл қалдыру</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-gray-100 text-gray-800 flex items-center justify-between">
+                        <span><i class="fa-solid fa-wifi mr-2"></i> Wi-Fi: Roasters_5G</span>
+                        <span class="text-xs bg-white px-2 py-0.5 rounded border">Көшіру</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <div class="p-3 rounded-xl bg-emerald-50 text-emerald-800 text-center text-xs font-semibold">2GIS Пікір</div>
+                        <div class="p-3 rounded-xl bg-pink-50 text-pink-800 text-center text-xs font-semibold">Instagram</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <section id="pricing" class="bg-white border-t py-16">
+            <div class="max-w-5xl mx-auto px-4">
+                <h2 data-i18n="pricing_title" class="text-3xl font-bold text-center mb-3">Ашық тарифтер</h2>
+                <p data-i18n="pricing_sub" class="text-center text-gray-500 mb-10">Тегін бастаңыз. Ақылы тарифтер төлем жүйесі қосылғаннан кейін іске қосылады.</p>
+                <div id="landing-plans-grid" class="grid md:grid-cols-3 gap-6"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- КІРУ / ТІРКЕЛУ МОДАЛЫ -->
+    <div id="auth-modal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 id="auth-title" class="text-xl font-bold mb-1">TapMenu-ге кіру</h3>
+            <p id="auth-subtitle" class="text-sm text-gray-500 mb-6">Мекемеңіздің NFC-парақшасын басқарыңыз</p>
+
+            <form id="auth-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Email</label>
+                    <input type="email" id="auth-email" required placeholder="cafe@example.kz" class="w-full px-3.5 py-2.5 rounded-xl border focus:ring-2 focus:ring-black outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Құпия сөз</label>
+                    <input type="password" id="auth-password" required minlength="6" placeholder="Кемінде 6 таңба" class="w-full px-3.5 py-2.5 rounded-xl border focus:ring-2 focus:ring-black outline-none">
+                </div>
+                <div id="signup-cafe-fields" class="hidden space-y-4 pt-2 border-t">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Мекеме атауы</label>
+                        <input type="text" id="auth-cafe-name" placeholder="Мысалы: Besqazan" class="w-full px-3.5 py-2.5 rounded-xl border focus:ring-2 focus:ring-black outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Тұрақты NFC-мекенжай (Slug)</label>
+                        <div class="flex items-center border rounded-xl overflow-hidden bg-gray-50">
+                            <span class="px-3 text-xs text-gray-500 font-mono">tapmenu.kz/</span>
+                            <input type="text" id="auth-cafe-slug" placeholder="besqazan" pattern="[a-z0-9-]+" class="w-full px-2 py-2.5 bg-white outline-none text-sm font-mono">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="auth-submit-btn" class="w-full py-3 rounded-xl bg-black text-white font-semibold hover:bg-gray-800 transition">
+                    Жалғастыру
+                </button>
+            </form>
+            <div class="mt-4 text-center text-sm">
+                <button id="auth-switch-btn" onclick="toggleAuthMode()" class="text-gray-600 hover:text-black underline">
+                    Аккаунтыңыз жоқ па? Кафе тіркеу
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 2. КАФЕ КАБИНЕТІ (/dashboard)                             -->
+    <!-- ========================================================= -->
+    <div id="view-dashboard" class="view-section hidden min-h-screen bg-gray-50">
+        <nav class="bg-white border-b sticky top-0 z-30">

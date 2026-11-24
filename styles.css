@@ -1,0 +1,32 @@
+---
+
+### 2-файл: `styles.css`
+*(Блокнотқа қойып, «Тип файла: Все файлы (*.* )» деп таңдап, атын `styles.css` деп сақтаңыз)*
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.nfc-btn {
+    transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease, opacity 0.16s ease;
+}
+
+.nfc-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.2);
+}
+
+.nfc-btn:active {
+    transform: scale(0.98);
+}
+
+#live-preview-frame::-webkit-scrollbar {
+    width: 4px;
+}
+#live-preview-frame::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 9999px;
+}
